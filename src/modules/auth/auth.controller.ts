@@ -42,7 +42,14 @@ export class AuthController {
     @Get('google')
     @Throttle({ default: { limit: 5, ttl: 60 } })
     @UseGuards(AuthGuard('google'))
-    @ApiOperation({ summary: 'Redirect user to Google for OAuth login' })
+    @ApiOperation({
+        summary: 'Redirect user to Google login',
+        description: 'Use this link in your browser to login via Google OAuth',
+        externalDocs: {
+            description: 'Login with Google',
+            url: 'https://analytics-backend.up.railway.app/api/auth/google',
+        },
+    })
     @ApiResponse({ status: 302, description: 'Redirects to Google login page' })
     async googleAuth() {
         // Initiates Google OAuth login
