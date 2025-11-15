@@ -1,5 +1,5 @@
 // auth/auth.service.ts
-import { Injectable, BadRequestException, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, Body} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ApiResponse } from '../../common/response';
@@ -23,7 +23,7 @@ export class AuthService {
         return 'ak_' + crypto.randomBytes(32).toString('hex');
     }
 
-    async register(dto: RegisterDto) {
+    async register(@Body() dto: RegisterDto) {
         const { email, password, appName } = dto;
         let user = await this.userRepository.findOne({ where: { email } });
         if (user) {

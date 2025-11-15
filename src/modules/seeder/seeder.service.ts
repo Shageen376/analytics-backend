@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ApiResponse } from 'src/common/response';
@@ -8,26 +8,43 @@ import { Browser } from '../../entities/browser.entity';
 
 @Injectable()
 export class SeederService {
+  private readonly logger = new Logger(SeederService.name);
+
   constructor(
     @InjectRepository(OS)
     private readonly osRepository: Repository<OS>,
+
     @InjectRepository(Device)
     private readonly deviceRepository: Repository<Device>,
+
     @InjectRepository(Browser)
     private readonly browserRepository: Repository<Browser>,
-  ) { }
+  ) {}
 
-  async seed(): Promise<{ message: string }> {
-    const insertedItems: string[] = [];
-    const osInserted = await this.seedOS();
-    const deviceInserted = await this.seedDevices();
-    const browserInserted = await this.seedBrowsers();
-    insertedItems.push(...osInserted, ...deviceInserted, ...browserInserted);
-    const message =
-      insertedItems.length > 0
-        ? `Seeder executed successfully. Inserted: ${insertedItems.join(', ')}`
-        : 'Seeder executed successfully. No new items to insert.';
-    return ApiResponse.success(message, { inserted: insertedItems, totalInserted: insertedItems.length }) ;
+  async seed() {
+    try {
+      const insertedItems: string[] = [];
+
+      const osInserted = await this.seedOS();
+      const deviceInserted = await this.seedDevices();
+      const browserInserted = await this.seedBrowsers();
+
+      insertedItems.push(...osInserted, ...deviceInserted, ...browserInserted);
+
+      const message =
+        insertedItems.length > 0
+          ? `Seeder executed successfully. Inserted: ${insertedItems.join(', ')}`
+          : 'Seeder executed successfully. No new items to insert.';
+
+      return ApiResponse.success(message, {
+        inserted: insertedItems,
+        totalInserted: insertedItems.length,
+      });
+
+    } catch (error) {
+      this.logger.error('Seeder failed', error.stack);
+      throw new InternalServerErrorException('Seeder failed to execute');
+    }
   }
 
   private async seedOS(): Promise<string[]> {

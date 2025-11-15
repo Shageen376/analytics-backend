@@ -60,10 +60,21 @@ export class AnalyticsService {
         const where: any = {};
         if (event) where.event = event;
         // Filter by date
-        if (startDate && endDate)
-            where.time_stamp = Between(new Date(startDate), new Date(endDate));
-        else if (startDate)
-            where.time_stamp = Between(new Date(startDate), new Date());
+        if (startDate && endDate) {
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            end.setHours(23, 59, 59, 999);
+            where.time_stamp = Between(start, end);
+        } else if (startDate) {
+            const start = new Date(startDate);
+            const end = new Date(); // now
+            where.time_stamp = Between(start, end);
+        } else if (endDate) {
+            const start = new Date(0); 
+            const end = new Date(endDate);
+            end.setHours(23, 59, 59, 999); // include the full end date
+            where.time_stamp = Between(start, end);
+        }
         // Filter by appId
         if (appId) {
             const app = await this.appRepository.findOne({ where: { id: appId } });
@@ -104,6 +115,6 @@ export class AnalyticsService {
             browser: recentEvent.browser?.name || 'unknown',
             os: recentEvent.os?.name || 'unknown',
         };
-        return ApiResponse.success('User analytics retrieved successfully', { userId: targetCustomerId, totalEvents, deviceDetails, ipAddress: recentEvent.ip_address});
+        return ApiResponse.success('User analytics retrieved successfully', { userId: targetCustomerId, totalEvents, deviceDetails, ipAddress: recentEvent.ip_address });
     }
 }
