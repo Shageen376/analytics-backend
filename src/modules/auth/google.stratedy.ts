@@ -34,9 +34,8 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         if (!email) return done(new Error('No email found from Google account'));
         let user = await this.userRepository.findOne({
             where: { email },
-            relations: ['key', 'apps'],
+            relations: ['apps'],
         });
-
         if (!user) {
             const secretKey = crypto.randomBytes(32).toString('hex');
             user = this.userRepository.create({ email, api_key: secretKey });
