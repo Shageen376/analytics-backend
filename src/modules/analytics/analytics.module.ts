@@ -9,11 +9,10 @@ import { App } from '../../entities/app.entity';
 import { Device } from '../../entities/device.entity';
 import { Browser } from '../../entities/browser.entity';
 import { OS } from '../../entities/os.entity';
-import { Key } from '../../entities/key.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Analytics, User, App, Device, Browser, OS, Key]),
+    TypeOrmModule.forFeature([Analytics, User, App, Device, Browser, OS]),
   ],
   providers: [AnalyticsService],
   controllers: [AnalyticsController],

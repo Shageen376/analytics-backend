@@ -1,31 +1,26 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, OneToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { App } from './app.entity';
-import { Key } from './key.entity';
-import { Analytics } from './analytics.entity';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn('uuid')
-  id!: string;
+	@PrimaryGeneratedColumn('uuid')
+	id!: string;
 
-  @Column({ unique: true })
-  email!: string;
+	@Column({ unique: true })
+	email!: string;
 
-  @Column({ nullable: true })
-  password!: string;
+	@Column({ nullable: true })
+	password!: string;
 
-  @OneToMany(() => App, app => app.user)
-  apps!: App[];
+	@Column({ unique: true })
+	api_key!: string;
 
-  @OneToOne(() => Key, key => key.user)
-  key!: Key;
+	@OneToMany(() => App, app => app.user)
+	apps!: App[];
 
-  @OneToMany(() => Analytics, analytics => analytics.user)
-  analytics!: Analytics[];
+	@CreateDateColumn()
+	created_at!: Date;
 
-  @CreateDateColumn()
-  created_at!: Date;
-
-  @UpdateDateColumn()
-  updated_at!: Date;
+	@UpdateDateColumn()
+	updated_at!: Date;
 }

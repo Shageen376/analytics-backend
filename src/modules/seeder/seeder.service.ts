@@ -1,14 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { ApiResponse } from 'src/common/response';
 import { OS } from '../../entities/os.entity';
 import { Device } from '../../entities/device.entity';
 import { Browser } from '../../entities/browser.entity';
 
 @Injectable()
 export class SeederService {
-  private readonly logger = new Logger(SeederService.name);
-
   constructor(
     @InjectRepository(OS)
     private readonly osRepository: Repository<OS>,
@@ -16,7 +15,7 @@ export class SeederService {
     private readonly deviceRepository: Repository<Device>,
     @InjectRepository(Browser)
     private readonly browserRepository: Repository<Browser>,
-  ) {}
+  ) { }
 
   async seed(): Promise<{ message: string }> {
     const insertedItems: string[] = [];
@@ -28,8 +27,7 @@ export class SeederService {
       insertedItems.length > 0
         ? `Seeder executed successfully. Inserted: ${insertedItems.join(', ')}`
         : 'Seeder executed successfully. No new items to insert.';
-    this.logger.log(message);
-    return { message };
+    return ApiResponse.success(message, { inserted: insertedItems, totalInserted: insertedItems.length }) ;
   }
 
   private async seedOS(): Promise<string[]> {
@@ -40,7 +38,6 @@ export class SeederService {
       const exists = await this.osRepository.findOne({ where: { name } });
       if (!exists) {
         await this.osRepository.save({ name });
-        this.logger.log(`Inserted OS: ${name}`);
         inserted.push(`OS:${name}`);
       }
     }
@@ -55,7 +52,6 @@ export class SeederService {
       const exists = await this.deviceRepository.findOne({ where: { name } });
       if (!exists) {
         await this.deviceRepository.save({ name });
-        this.logger.log(`Inserted Device: ${name}`);
         inserted.push(`Device:${name}`);
       }
     }
@@ -70,7 +66,6 @@ export class SeederService {
       const exists = await this.browserRepository.findOne({ where: { name } });
       if (!exists) {
         await this.browserRepository.save({ name });
-        this.logger.log(`Inserted Browser: ${name}`);
         inserted.push(`Browser:${name}`);
       }
     }

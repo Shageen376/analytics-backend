@@ -1,36 +1,32 @@
 // auth/dto/register.dto.ts
-import { IsEmail, IsNotEmpty, MinLength } from 'class-validator';
+import { IsEmail, IsNotEmpty, Matches } from 'class-validator';
 
 export class RegisterDto {
-  @IsEmail()
+  @IsEmail({}, { message: 'Valid email is required' })
   email!: string;
 
   @IsNotEmpty()
-  @MinLength(6)
-  password!: string;
+  @Matches(/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/, {
+    message: 'Password must be at least 8 characters, include uppercase, number, and special character',
+  })
+  password: string;
 
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'Valid App is required' })
   appName!: string;
-
-  @IsNotEmpty()
-  domain!: string;
 }
 
 export class GetApiKeyDto {
-  @IsEmail()
+  @IsEmail({}, { message: 'Valid email is required' })
   email!: string;
 
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'Password is required' })
   password!: string;
-
-  @IsNotEmpty()
-  appName!: string;
 }
 
 export class RevokeApiKeyDto {
-  @IsEmail()
+  @IsEmail({}, { message: 'Valid email is required' })
   email!: string;
 
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'Password is required' })
   password!: string;
 }

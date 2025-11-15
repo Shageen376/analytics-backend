@@ -1,5 +1,4 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { User } from './user.entity';
 import { App } from './app.entity';
 import { Device } from './device.entity';
 import { Browser } from './browser.entity';
@@ -10,8 +9,8 @@ export class Analytics {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @ManyToOne(() => User, user => user.analytics)
-  user!: User;
+  @Column()
+  customerId?: string;
 
   @ManyToOne(() => App, app => app.analytics)
   app!: App;
@@ -22,7 +21,7 @@ export class Analytics {
   @Column()
   url!: string;
 
-  @Column({ nullable: true })
+  @Column()
   referrer?: string;
 
   @ManyToOne(() => Device, device => device.analytics)

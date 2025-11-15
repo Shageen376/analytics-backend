@@ -7,7 +7,6 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../../entities/user.entity';
 import { App } from '../../entities/app.entity';
-import { Key } from '../../entities/key.entity';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
@@ -17,8 +16,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         private readonly userRepository: Repository<User>,
         @InjectRepository(App)
         private readonly appRepository: Repository<App>,
-        @InjectRepository(Key)
-        private readonly keyRepository: Repository<Key>,
     ) {
         super({
             clientID: configService.get<string>('GOOGLE_CLIENT_ID')!,
@@ -28,11 +25,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         } as any);
     }
 
-    async validate(
-        accessToken: string,
-        refreshToken: string,
-        profile: any,
-        done: VerifyCallback
+    async validate(accessToken: string, refreshToken: string, profile: any, done: VerifyCallback
     ) {
         const email = profile.emails?.[0]?.value;
         const firstName = profile.name?.givenName || '';
@@ -45,11 +38,9 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         });
 
         if (!user) {
-            user = this.userRepository.create({ email, firstName, lastName } as Partial<User>);
-            await this.userRepository.save(user);
             const secretKey = crypto.randomBytes(32).toString('hex');
-            const key = this.keyRepository.create({ secret_key: secretKey, user });
-            await this.keyRepository.save(key);
+            user = this.userRepository.create({ email, api_key: secretKey });
+            await this.userRepository.save(user);
         }
         const appName = 'Default App';
         let app = await this.appRepository.findOne({
@@ -59,7 +50,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
             app = this.appRepository.create({ name: appName, user });
             await this.appRepository.save(app);
         }
-        const result = { userId: user.id, appId: app.id, apiKey: user.key?.secret_key, email, firstName, lastName, profilePicture };
+        const result = { userId: user.id, appId: app.id, apiKey: user.api_key, email, firstName, lastName, profilePicture };
         done(null, result);
     }
 }
