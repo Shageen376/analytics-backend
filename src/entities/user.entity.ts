@@ -1,7 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Index, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { App } from './app.entity';
 
 @Entity()
+@Index(['email'], { unique: true })
+@Index(['api_key'], { unique: true })
 export class User {
 	@PrimaryGeneratedColumn('uuid')
 	id!: string;

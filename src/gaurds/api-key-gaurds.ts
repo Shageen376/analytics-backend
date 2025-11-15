@@ -26,7 +26,7 @@ export class ApiKeyGuard implements CanActivate {
 		if (!user)
 			throw new UnauthorizedException('Invalid API key');
 		request.user = user;
-		request.userApps = user.apps.map(app => app.id); 
+		request.userApps = user.apps.map(app => app.id);
 		return true;
 	}
 }

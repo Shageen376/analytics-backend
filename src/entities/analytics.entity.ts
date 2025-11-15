@@ -1,10 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Index, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { App } from './app.entity';
 import { Device } from './device.entity';
 import { Browser } from './browser.entity';
 import { OS } from './os.entity';
 
 @Entity()
+@Index(['customerId', 'app'])
+@Index(['app'])
+@Index(['time_stamp'])
+@Index(['event'])
 export class Analytics {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
