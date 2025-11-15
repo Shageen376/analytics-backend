@@ -1,98 +1,114 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Analytics App
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A scalable backend API for a Website Analytics app that can be integrated with any website or mobile app. The system will allow clients to collect detailed analytics events such as clicks, website visits, referrer data, and device metrics. The APIs can handle high traffic, provide efficient aggregation endpoints, and be containerized for deployment.
+**Production URL:** [https://analytics-backend.up.railway.app](https://analytics-backend.up.railway.app)
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Table of Contents
 
-## Description
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Local Setup](#local-setup)
+- [Testing](#testing)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Features
 
-## Project setup
+### API Key Management
 
-```bash
-$ npm install
-```
+- Websites and apps must register to obtain an API key.
+- API keys are required for authentication when sending events (use headers to send API keys).
+- Endpoints support creating, revoking, regenerating API keys, and handling expiration.
 
-## Compile and run the project
+### Event Data Collection
 
-```bash
-# development
-$ npm run start
+- Accepts analytics events such as clicks, visits, referrer info, and device details.
+- Ensures data integrity and high availability for large-scale event ingestion.
 
-# watch mode
-$ npm run start:dev
+### Analytics & Reporting
 
-# production mode
-$ npm run start:prod
-```
+- Provides insights via time-based, event-based, app-based, and user-based data aggregation.
+- Supports caching using Redis for frequently requested data.
 
-## Run tests
+## Tech Stack
 
-```bash
-# unit tests
-$ npm run test
+### Backend
 
-# e2e tests
-$ npm run test:e2e
+- **Framework:** NestJS
+- **Language:** TypeScript
+- **Database:** PostgreSQL
 
-# test coverage
-$ npm run test:cov
-```
+### DevOps & Deployment
 
-## Deployment
+- **Deployment:** Railway
+- **Containerization:** Docker
+- **Environment Management:** dotenv / Environment Variables
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+### Testing & Validation
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+- **Manual API Testing:** Postman (for testing all endpoints and API flows)
+- **Validation:** class-validator, class-transformer (to ensure request data integrity)
+
+### Others
+
+- **API Documentation:** Swagger https://analytics-backend.up.railway.app/api-docs
+- **Version Control:** Git / GitHub https://github.com/Shageen376/analytics-backend.git
+
+## Local Setup
+
+Follow these steps to get the Analytics Backend App running on your local machine at http://localhost:3000
+
+**1. Clone the repository**
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+git clone https://github.com/Shageen376/analytics-backend.git
+cd analytics-app
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+**2. Install dependencies**
 
-## Resources
+```
+npm install
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+**3. Set up Environment Variables**
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+Create .env file with following variables
 
-## Support
+```
+DB_HOST=
+DB_PORT=
+DB_USERNAME=
+DB_PASSWORD=
+DB_NAME=
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GOOGLE_CALLBACK_URL=
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+**4. Run the application**
 
-## Stay in touch
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- **Development mode (with live reload)**
 
-## License
+```
+npm run start:dev
+```
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+- **Production mode**
+
+```
+npm run start
+```
+
+- **Run using Docker**
+
+```
+docker build -t analytics-backend .
+docker run -p 3000:3000 analytics-backend
+```
+## Testing
+
+To test the API endpoints, import the provided Postman collection from the app
+```
+Analytics-Backend.postman_collection.json
+```
+into Postman. This collection includes all major routes and sample requests for easy testing and validation.
